@@ -3,16 +3,12 @@ import time
 from aqt import mw
 from aqt.qt import *
 import psutil
+import threading
+import DenyAccessThreading
 
-
-def denyAccess():
-    counter = 0
-    while True:
-        subprocess.call('TASKKILL /F /IM VCMI_launcher.exe')
-        if counter >= 20:
-            break
-        time.sleep(1)
-        counter += 1
+accesscheck = 0
+DenyAccessThread = threading.Thread(target=DenyAccessThreading.denyAccess(checkaccess, 'VCMI_launcher.exe'))
+DenyAccessThread.start()
 
 
 def startGame(Path):
@@ -32,23 +28,12 @@ def runForXTime():
         counter += 1
 
 
-def checkIfProcessRunning(processName):
-    for proc in psutil.process_iter():
-        try:
-            # Check if process name contains the given name string.
-            if processName.lower() in proc.name().lower():
-                return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            pass
-    return False
-
-
 def testFunction() -> None:
     counter = 0
     startGame('C:/Program Files (x86)/VCMI (branch develop)/VCMI_launcher.exe')
-    while checkIfProcessRunning('VCMI_launcher.exe'):
-        if counter >= 20:
-            denyAccess()
+    while DenyAccessThreading.checkIfProcessRunning('VCMI_launcher.exe'):
+        if counter >= 5:
+            globals()['accesscheck'] = 1
             break
         time.sleep(1)
         counter += 1

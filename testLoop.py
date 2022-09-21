@@ -1,7 +1,3 @@
-import subprocess
-import time
-import psutil
-
 ''''counter = 0
 while True:
     if counter >= 10:
@@ -24,4 +20,3 @@ def checkIfProcessRunning(processName):
 
 while True:
     print(checkIfProcessRunning('VCMI_launcher.exe'))'''
-
