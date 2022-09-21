@@ -1,4 +1,4 @@
-''''counter = 0
+"""counter = 0
 while True:
     if counter >= 10:
         print("so viele minuten sind schon vergangen: %d", counter/60)
@@ -19,4 +19,4 @@ def checkIfProcessRunning(processName):
 
 
 while True:
-    print(checkIfProcessRunning('VCMI_launcher.exe'))'''
+    print(checkIfProcessRunning('VCMI_launcher.exe'))"""

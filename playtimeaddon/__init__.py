@@ -1,13 +1,12 @@
-import subprocess
-import time
 from aqt import mw
 from aqt.qt import *
-import psutil
 import threading
-import DenyAccessThreading
+import subprocess
+import time
+import playtimeaddon.test.DenyAccessThreading as DenyAccessThreading
 
 accesscheck = 0
-DenyAccessThread = threading.Thread(target=DenyAccessThreading.denyAccess(checkaccess, 'VCMI_launcher.exe'))
+DenyAccessThread = threading.Thread(target=DenyAccessThreading.denyAccess(accesscheck, 'VCMI_launcher.exe'))
 DenyAccessThread.start()
 
 
