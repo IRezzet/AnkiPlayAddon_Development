@@ -1,27 +1,59 @@
-# import the main window object (mw) from aqt
-from aqt import mw
-# import the "show info" tool from utils.py
-from aqt.utils import showInfo, qconnect
-# import all of the Qt GUI library
-from aqt.qt import *
 import subprocess
+import time
+from aqt import mw
+from aqt.qt import *
+import psutil
 
 
-# We're going to add a menu item below. First we want to create a function to
-# be called when the menu item is activated.
+def denyAccess():
+    counter = 0
+    while True:
+        subprocess.call('TASKKILL /F /IM VCMI_launcher.exe')
+        if counter >= 20:
+            break
+        time.sleep(1)
+        counter += 1
+
+
+def startGame(Path):
+    subprocess.Popen(Path)
+
+
+def CloseGame():
+    subprocess.call('TASKKILL /F /IM VCMI_launcher.exe')
+
+
+def runForXTime():
+    counter = 0
+    while True:
+        if counter >= 1800:
+            break
+        time.sleep(1)
+        counter += 1
+
+
+def checkIfProcessRunning(processName):
+    for proc in psutil.process_iter():
+        try:
+            # Check if process name contains the given name string.
+            if processName.lower() in proc.name().lower():
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return False
+
 
 def testFunction() -> None:
-    # get the number of cards in the current collection, which is stored in
-    # the main window
-    # cardCount = mw.col.cardCount()
-    # show a message box
-    # showInfo("Card count: %d" % cardCount)
-    subprocess.call(['C:/Users/jonas/Desktop/ValorantCC.exe'])
+    counter = 0
+    startGame('C:/Program Files (x86)/VCMI (branch develop)/VCMI_launcher.exe')
+    while checkIfProcessRunning('VCMI_launcher.exe'):
+        if counter >= 20:
+            denyAccess()
+            break
+        time.sleep(1)
+        counter += 1
 
 
-# create a new menu item, "test"
-action = QAction("Yoyoyo", mw)
-# set it to call testFunction when it's clicked
+action = QAction("Start Playing", mw)
 qconnect(action.triggered, testFunction)
-# and add it to the tools menu
 mw.form.menuTools.addAction(action)
